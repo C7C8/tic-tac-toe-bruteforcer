@@ -1,1 +1,4 @@
 Chess Solver.cbp
+obj/
+*.cbp
+*.layout
