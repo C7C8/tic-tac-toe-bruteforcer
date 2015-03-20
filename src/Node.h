@@ -4,12 +4,14 @@
 #include <vector>
 using namespace std;
 
-const unsigned short int GRID_X = 3;
-const unsigned short int GRID_Y = 3;
+const uint8_t GRID_X = 3;
+const uint8_t GRID_Y = 3;
+const uint8_t DIST_TO_WIN = 3; //The distance that a chain needs to cover in order to count as a win
 
-const uint8_t X = 0;
-const uint8_t O = 1;
-enum endType {XWIN, OWIN, TIE};
+const uint8_t X = 1;
+const uint8_t O = 2;
+enum endType {NONE, XWIN, OWIN, TIE};
+
 
 class Node
 {
