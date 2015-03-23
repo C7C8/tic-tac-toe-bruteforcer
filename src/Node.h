@@ -24,9 +24,13 @@ public:
     uint8_t getXCount() const;
     uint8_t getOCount() const;
     uint8_t getTieCount() const;
+    uint8_t getValue(uint8_t x, uint8_t y);
+    uint8_t getTurn();
     void incrXCount(int amount = 1);
     void incrOCount(int amount = 1);
     void incrTieCount(int amount = 1);
+    void setValue(uint8_t x, uint8_t y, uint8_t value);
+    void setTurn(uint8_t newTurn);
 protected:
     uint8_t investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint8_t piece);
 

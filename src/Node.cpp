@@ -158,7 +158,7 @@ Node::Node()
     xCount = 0;
     oCount = 0;
     tieCount = 0;
-    turn = PIECE_X;
+    turn = PIECE_O; //This is so the first move registered is X if solveForChildren() is called.
     parent = nullptr;
     count++;
 
@@ -186,4 +186,24 @@ uint8_t Node::investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint
     if (board[iX][iY] != piece)
         return 0;
     return investigateSlot(iX, iY, dX, dY, piece) + 1; //Return a plus 1 to indicate that yes, this was another segment in the line.
+}
+
+uint8_t Node::getValue(uint8_t x, uint8_t y)
+{
+    if (x >= 0 && x < GRID_X && y >= 0 && y < GRID_Y)
+        return board[x][y];
+    return -2; //Not a real value - indicates error condition.
+}
+uint8_t Node::getTurn()
+{
+    return turn;
+}
+void Node::setValue(uint8_t x, uint8_t y, uint8_t value)
+{
+    if (x >= 0 && x < GRID_X && y >= 0 && y < GRID_Y)
+        board[x][y] = value;
+}
+void Node::setTurn(uint8_t newTurn)
+{
+    turn = newTurn;
 }
