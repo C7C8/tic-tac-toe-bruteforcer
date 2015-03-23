@@ -1,35 +1,32 @@
 #include "Node.h"
 
 int Node::count = 0;
+long int Node::oCount = 0;
+long int Node::xCount = 0;
+long int Node::tieCount = 0;
 
-/** @brief Increments the tie count. Recursively increments the count for everything above it too.
+/** @brief Increments the tie count.
   * @param amount The amount to increment by. Can be negative.
   */
 void Node::incrTieCount(int amount)
 {
     tieCount += amount;
-    if (parent != nullptr)
-        parent->incrTieCount(amount);
 }
 
-/** @brief Increments the O win count. Recursively increments the count for everything above it too.
+/** @brief Increments the O win count.
   * @param amount The amount to increment by. Can be negative.
   */
 void Node::incrOCount(int amount)
 {
     oCount += amount;
-    if (parent != nullptr)
-        parent->incrOCount();
 }
 
-/** @brief Increments the X win count. Recursively increments the count for everything above it too.
+/** @brief Increments the X win count.
   * @param amount The amount to increment by. Can be negative.
   */
 void Node::incrXCount(int amount)
 {
     xCount += amount;
-    if (parent != nullptr)
-        parent->incrXCount();
 }
 
 /** @brief Gets the tie count
@@ -118,7 +115,6 @@ void Node::solveForChildren()
                 continue;
 
             Node newNode;
-            newNode.parent = this;
             newNode.turn = turn * -1;
 
             //Copy this node's board over to the child node
@@ -156,11 +152,7 @@ int Node::getCount()
   */
 Node::Node()
 {
-    xCount = 0;
-    oCount = 0;
-    tieCount = 0;
     turn = PIECE_O; //This is so the first move registered is X if solveForChildren() is called.
-    parent = nullptr;
     count++;
 
     //Initialize board

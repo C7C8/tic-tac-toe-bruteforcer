@@ -34,12 +34,11 @@ public:
 protected:
     uint8_t investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint8_t piece);
 
-    int xCount;
-    int oCount;
-    int tieCount;
+    static long int xCount;
+    static long int oCount;
+    static long int tieCount;
     uint8_t turn; //Whose turn it is RIGHT NOW. As in, ON THIS NODE!
 
-    Node* parent;
     static int count;
 
     uint8_t board[GRID_X][GRID_Y];
