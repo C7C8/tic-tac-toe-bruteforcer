@@ -18,7 +18,7 @@ class Node
 public:
     Node();
     void solveForChildren();
-    endType getEndType() const;
+    endType getEndType(uint8_t winDist = DIST_TO_WIN);
     static int getCount();
 
     uint8_t getXCount() const;
@@ -28,6 +28,8 @@ public:
     void incrOCount(int amount = 1);
     void incrTieCount(int amount = 1);
 protected:
+    uint8_t investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint8_t piece);
+
     uint8_t xCount;
     uint8_t oCount;
     uint8_t tieCount;

@@ -53,11 +53,43 @@ uint8_t Node::getXCount() const
     return xCount;
 }
 
-/** @brief Gets what type of ending this board contains.
+/** @brief Gets what type of ending this board contains. Complexity increases with board size and fill level of board.
   * @return Enumerated end type
   */
-endType Node::getEndType() const
+endType Node::getEndType(uint8_t winDist)
 {
+    //Universal win detector. Works by detecting straight lines.
+    for (uint8_t iX = 0; iX != GRID_X; ++iX)
+    {
+        for (uint8_t iY = 0; iY != GRID_Y; ++iY)
+        {
+            //Check for empty space
+            if (board[iX][iY] == 0)
+                continue;
+
+            uint8_t piece = board[iX][iY]; //What piece is at this spot?
+            //Begin line identification process. i and j are the directions to move in.
+            for (uint8_t i = -1; i < 2; ++i)
+            {
+                for (uint8_t j = -1; j < 2; ++j)
+                {
+                    if (i == 0 && j == 0)
+                        continue; //Skip spots of not moving at all.
+
+                    uint8_t lineLength = investigateSlot(iX, iY, i, j, piece);
+                    if (lineLength < winDist)
+                        continue;
+
+                    if (piece == PIECE_X)
+                        return XWIN; //Unrelated to XBOX.
+                    else if (piece ==PIECE_O)
+                        return OWIN;
+
+                }
+            }
+        }
+    }
+
     //Check for tie condition (last step)
     bool tie = true;
     for (uint8_t iX = 0; iX < GRID_X; ++iX)
@@ -136,3 +168,22 @@ Node::Node()
             board[x][y] = 0;
 }
 
+/** @brief Recursively finds the longest line given a starting spot, a direction, and a piece to look for.
+  * @return The maximum line length found.
+  */
+uint8_t Node::investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint8_t piece)
+{
+    uint8_t iX = x + dX;
+    uint8_t iY = y + dY;
+
+    //Out-of-bounds checking
+    if (iX < 0 || iX >= GRID_X)
+        return 0;
+    if (iY < 0 || iY >= GRID_Y)
+        return 0;
+
+    //Perform actual check for the selected piece on this location
+    if (board[iX][iY] != piece)
+        return 0;
+    return investigateSlot(iX, iY, dX, dY, piece) + 1; //Return a plus 1 to indicate that yes, this was another segment in the line.
+}
