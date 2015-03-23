@@ -59,9 +59,9 @@ uint8_t Node::getXCount() const
 endType Node::getEndType(uint8_t winDist)
 {
     //Universal win detector. Works by detecting straight lines.
-    for (uint8_t iX = 0; iX != GRID_X; ++iX)
+    for (uint8_t iX = 0; iX < GRID_X; ++iX)
     {
-        for (uint8_t iY = 0; iY != GRID_Y; ++iY)
+        for (uint8_t iY = 0; iY < GRID_Y; ++iY)
         {
             //Check for empty space
             if (board[iX][iY] == 0)
@@ -69,14 +69,14 @@ endType Node::getEndType(uint8_t winDist)
 
             uint8_t piece = board[iX][iY]; //What piece is at this spot?
             //Begin line identification process. i and j are the directions to move in.
-            for (uint8_t i = -1; i < 2; ++i)
+            for (int i = -1; i < 2; ++i)
             {
-                for (uint8_t j = -1; j < 2; ++j)
+                for (int j = -1; j < 2; ++j)
                 {
                     if (i == 0 && j == 0)
                         continue; //Skip spots of not moving at all.
 
-                    uint8_t lineLength = investigateSlot(iX, iY, i, j, piece);
+                    uint8_t lineLength = investigateSlot(iX, iY, i, j, piece) + 1; //+1 to account for THIS spot.
                     if (lineLength < winDist)
                         continue;
 
@@ -84,7 +84,6 @@ endType Node::getEndType(uint8_t winDist)
                         return XWIN; //Unrelated to XBOX.
                     else if (piece ==PIECE_O)
                         return OWIN;
-
                 }
             }
         }
