@@ -135,6 +135,8 @@ void Node::solveForChildren()
                 newNode.incrXCount();
             else if (nodeType == OWIN)
                 newNode.incrOCount();
+            else if (nodeType == TIE)
+                newNode.incrTieCount();
             else
                 newNode.solveForChildren();
 
