@@ -11,4 +11,6 @@ int main()
     cout << "X Wins:\t" << rootNode.getXCount() << endl;
     cout << "O Wins:\t" << rootNode.getOCount() << endl;
     cout << "Ties:\t" << rootNode.getTieCount() << endl;
+    cout << "Sum:\t" << rootNode.getTieCount() + rootNode.getXCount() + rootNode.getOCount() << endl;
+    cout << "Size:\t" << sizeof(rootNode) << endl;
 }
