@@ -34,21 +34,21 @@ void Node::incrXCount(int amount)
 
 /** @brief Gets the tie count
   */
-uint8_t Node::getTieCount() const
+int Node::getTieCount() const
 {
     return tieCount;
 }
 
 /** @brief Gets the O win count.
   */
-uint8_t Node::getOCount() const
+int Node::getOCount() const
 {
     return oCount;
 }
 
 /** @brief Gets the X win count.
   */
-uint8_t Node::getXCount() const
+int Node::getXCount() const
 {
     return xCount;
 }

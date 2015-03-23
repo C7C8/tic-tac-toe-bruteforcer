@@ -4,9 +4,11 @@ using namespace std;
 
 int main()
 {
-    cout << "Hello world!" << endl;
-    Node testNode;
-    testNode.solveForChildren();
-    cout << "Node count: " << testNode.getCount() << endl;
-    return 0;
+    cout << "Hello, world!" << endl;
+    Node rootNode;
+    rootNode.solveForChildren();
+    cout << "Number of nodes: " << rootNode.getCount() << endl;
+    cout << "X Wins:\t" << rootNode.getXCount() << endl;
+    cout << "O Wins:\t" << rootNode.getOCount() << endl;
+    cout << "Ties:\t" << rootNode.getTieCount() << endl;
 }

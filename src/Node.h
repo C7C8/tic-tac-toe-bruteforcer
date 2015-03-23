@@ -21,9 +21,9 @@ public:
     endType getEndType(uint8_t winDist = DIST_TO_WIN);
     static int getCount();
 
-    uint8_t getXCount() const;
-    uint8_t getOCount() const;
-    uint8_t getTieCount() const;
+    int getXCount() const;
+    int getOCount() const;
+    int getTieCount() const;
     uint8_t getValue(uint8_t x, uint8_t y);
     uint8_t getTurn();
     void incrXCount(int amount = 1);
@@ -34,9 +34,9 @@ public:
 protected:
     uint8_t investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint8_t piece);
 
-    uint8_t xCount;
-    uint8_t oCount;
-    uint8_t tieCount;
+    int xCount;
+    int oCount;
+    int tieCount;
     uint8_t turn; //Whose turn it is RIGHT NOW. As in, ON THIS NODE!
 
     Node* parent;
