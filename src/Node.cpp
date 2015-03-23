@@ -96,7 +96,7 @@ void Node::solveForChildren()
                     newNode.board[jX][jY] = board[jX][jY];
 
             //Apply the possible move.
-            newNode.board[iX][iY] = turn;
+            newNode.board[iX][iY] = newNode.turn;
 
             //Check this new node.
             endType nodeType = newNode.getEndType();
@@ -107,9 +107,7 @@ void Node::solveForChildren()
             else
                 newNode.solveForChildren();
 
-            cout << "Added node to end of child list. ";
             children.push_back(newNode);
-            cout << "List is now of length " << children.size() << endl;
         }
     }
 }
