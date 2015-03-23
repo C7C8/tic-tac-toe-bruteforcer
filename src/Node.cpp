@@ -58,7 +58,20 @@ uint8_t Node::getXCount() const
   */
 endType Node::getEndType() const
 {
-    return NONE;
+    //Check for tie condition (last step)
+    bool tie = true;
+    for (uint8_t iX = 0; iX < GRID_X; ++iX)
+    {
+        for (uint8_t iY = 0; iY < GRID_Y; iY++)
+        {
+            if (board[iX][iY] == 0)
+                tie = false;
+        }
+    }
+    if (tie)
+        return TIE;
+    else
+        return NONE;
 }
 
 /** @brief Solves for all of this node's children.
@@ -94,7 +107,9 @@ void Node::solveForChildren()
             else
                 newNode.solveForChildren();
 
+            cout << "Added node to end of child list. ";
             children.push_back(newNode);
+            cout << "List is now of length " << children.size() << endl;
         }
     }
 }
