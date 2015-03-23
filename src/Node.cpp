@@ -121,12 +121,12 @@ int Node::getCount()
 
 /** @brief Sets all values up, increments the global object count.
   */
- Node::Node()
+Node::Node()
 {
     xCount = 0;
     oCount = 0;
     tieCount = 0;
-    turn = X;
+    turn = PIECE_X;
     parent = nullptr;
     count++;
 

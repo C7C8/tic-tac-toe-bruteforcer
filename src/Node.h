@@ -8,8 +8,8 @@ const uint8_t GRID_X = 3;
 const uint8_t GRID_Y = 3;
 const uint8_t DIST_TO_WIN = 3; //The distance that a chain needs to cover in order to count as a win
 
-const uint8_t X = -1;
-const uint8_t O = 1;
+const uint8_t PIECE_X = -1;
+const uint8_t PIECE_O = 1;
 enum endType {NONE, XWIN, OWIN, TIE};
 
 
