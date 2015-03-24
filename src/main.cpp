@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include "Node.h"
 using namespace std;
 
@@ -12,4 +13,5 @@ int main()
     cout << "O Wins:\t" << rootNode.getOCount() << endl;
     cout << "Ties:\t" << rootNode.getTieCount() << endl;
     cout << "Sum:\t" << rootNode.getTieCount() + rootNode.getXCount() + rootNode.getOCount() << endl;
+    system("pause");
 }

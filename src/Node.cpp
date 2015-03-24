@@ -135,8 +135,6 @@ void Node::solveForChildren()
                 newNode.incrTieCount();
             else
                 newNode.solveForChildren();
-
-            children.push_back(newNode);
         }
     }
 }

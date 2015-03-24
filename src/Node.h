@@ -1,7 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
 using namespace std;
 
 const uint8_t GRID_X = 3;
@@ -42,5 +41,4 @@ protected:
     static int count;
 
     uint8_t board[GRID_X][GRID_Y];
-    vector<Node> children;
 };
