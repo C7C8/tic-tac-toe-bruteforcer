@@ -148,9 +148,10 @@ void Node::solveForChildren()
         }
     }
 
-    //Wait for all threads to complete
-    for (int i = 0; i < GRID_X * GRID_Y; ++i)
-        SDL_WaitThread(threads[i], nullptr);
+    //Wait for all threads to complete if there are any...
+    if (first)
+        for (int i = 0; i < GRID_X * GRID_Y; ++i)
+            SDL_WaitThread(threads[i], nullptr);
 }
 
 /** @brief Returns the total count of all the node objects that have ever been created here.

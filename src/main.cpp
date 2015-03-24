@@ -19,5 +19,5 @@ int main(int argc, char* args[])
     #ifndef ON_DEBUGGER
         system("pause");
     #endif // ON_DEBUGGER
-    return 0;
+    return 1;
 }
