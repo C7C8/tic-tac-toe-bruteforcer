@@ -1,9 +1,9 @@
 #include "Node.h"
 
-int Node::count = 0;
-long int Node::oCount = 0;
-long int Node::xCount = 0;
-long int Node::tieCount = 0;
+long long unsigned int Node::count = 0;
+long long unsigned int Node::oCount = 0;
+long long unsigned int Node::xCount = 0;
+long long unsigned int Node::tieCount = 0;
 
 /** @brief Increments the tie count.
   * @param amount The amount to increment by. Can be negative.

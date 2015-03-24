@@ -3,6 +3,8 @@
 #include "Node.h"
 using namespace std;
 
+#define ON_DEBUGGER
+
 int main()
 {
     cout << "Starting calculations..." << endl;
@@ -13,5 +15,8 @@ int main()
     cout << "O Wins:\t" << rootNode.getOCount() << endl;
     cout << "Ties:\t" << rootNode.getTieCount() << endl;
     cout << "Sum:\t" << rootNode.getTieCount() + rootNode.getXCount() + rootNode.getOCount() << endl;
-    system("pause");
+
+    #ifndef ON_DEBUGGER
+        system("pause");
+    #endif // ON_DEBUGGER
 }
