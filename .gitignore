@@ -2,3 +2,5 @@ Chess Solver.cbp
 obj/
 *.cbp
 *.layout
+*.depend
+doxygen/
