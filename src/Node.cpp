@@ -142,7 +142,7 @@ void Node::solveForChildren()
                     newNode.solveForChildren();
                     continue;
                 }
-                threads[threadcount] = SDL_CreateThread(exploreNode, "explorer #" + threadcount, (void*)newNode);
+                threads[threadcount] = SDL_CreateThread(exploreNode, "explorer #" + threadcount, (void*)&newNode);
                 threadcount++;
             }
         }
@@ -220,6 +220,6 @@ void Node::setTurn(uint8_t newTurn)
 int exploreNode(void* data)
 {
     //Dumb threaded function for exploring a node... using THREADS!
-    (Node*)(data)->solveForChildren();
+    ((Node*)(data))->solveForChildren();
     return 0;
 }

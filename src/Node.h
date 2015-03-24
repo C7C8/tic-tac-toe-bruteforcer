@@ -41,7 +41,7 @@ protected:
 
     bool first;
     static long long unsigned int count;
-    static SDL_Thread* threads[GRID_X * GRID_Y]; //One thread per open slot.
+    SDL_Thread* threads[GRID_X * GRID_Y]; //One thread per open slot.
 
     uint8_t board[GRID_X][GRID_Y];
 };
