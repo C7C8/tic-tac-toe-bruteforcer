@@ -4,7 +4,6 @@ long long unsigned int Node::count = 0;
 long long unsigned int Node::oCount = 0;
 long long unsigned int Node::xCount = 0;
 long long unsigned int Node::tieCount = 0;
-int Node::threadCount = 0;
 
 /** @brief Increments the tie count.
   * @param amount The amount to increment by. Can be negative.
@@ -107,6 +106,8 @@ endType Node::getEndType(uint8_t winDist)
   */
 void Node::solveForChildren()
 {
+    int threadcount = 0;
+
     for (uint8_t iX = 0; iX < GRID_X; ++iX)
     {
         for (uint8_t iY = 0; iY < GRID_Y; ++iY)
@@ -135,9 +136,21 @@ void Node::solveForChildren()
             else if (nodeType == TIE)
                 newNode.incrTieCount();
             else
-                newNode.solveForChildren();
+            {
+                if (!first)
+                {
+                    newNode.solveForChildren();
+                    continue;
+                }
+                threads[threadcount] = SDL_CreateThread(exploreNode, "explorer #" + threadcount, (void*)newNode);
+                threadcount++;
+            }
         }
     }
+
+    //Wait for all threads to complete
+    for (int i = 0; i < GRID_X * GRID_Y; ++i)
+        SDL_WaitThread(threads[i], nullptr);
 }
 
 /** @brief Returns the total count of all the node objects that have ever been created here.
