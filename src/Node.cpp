@@ -151,7 +151,10 @@ int Node::getCount()
 Node::Node()
 {
     turn = PIECE_O; //This is so the first move registered is X if solveForChildren() is called.
+
     count++;
+    if (count % 100000 == 0)
+        cout << "Count: " << count << endl;
 
     //Initialize board
     for (uint8_t x = 0; x < GRID_X; ++x)
