@@ -12,6 +12,7 @@ const uint8_t PIECE_X = -1;
 const uint8_t PIECE_O = 1;
 enum endType {NONE, XWIN, OWIN, TIE};
 
+extern SDL_SpinLock outputLock;
 
 class Node
 {
@@ -31,6 +32,8 @@ public:
     void incrTieCount(int amount = 1);
     void setValue(uint8_t x, uint8_t y, uint8_t value);
     void setTurn(uint8_t newTurn);
+
+    bool first;
 protected:
     uint8_t investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint8_t piece);
 
@@ -39,7 +42,6 @@ protected:
     static long long unsigned int tieCount;
     uint8_t turn; //Whose turn it is RIGHT NOW. As in, ON THIS NODE!
 
-    bool first;
     static long long unsigned int count;
     SDL_Thread* threads[GRID_X * GRID_Y]; //One thread per open slot.
 

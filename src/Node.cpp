@@ -1,5 +1,7 @@
 #include "Node.h"
 
+SDL_SpinLock outputLock = 0;
+
 long long unsigned int Node::count = 0;
 long long unsigned int Node::oCount = 0;
 long long unsigned int Node::xCount = 0;
@@ -169,8 +171,12 @@ Node::Node()
     first = false;
 
     count++;
-    if (count % 100000 == 0)
+    if (count % 1000000 == 0)
+    {
+        SDL_AtomicLock(&outputLock);
         cout << "Count: " << count << endl;
+        SDL_AtomicUnlock(&outputLock);
+    }
 
     //Initialize board
     for (uint8_t x = 0; x < GRID_X; ++x)
