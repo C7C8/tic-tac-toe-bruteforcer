@@ -4,6 +4,7 @@ long long unsigned int Node::count = 0;
 long long unsigned int Node::oCount = 0;
 long long unsigned int Node::xCount = 0;
 long long unsigned int Node::tieCount = 0;
+int Node::threadCount = 0;
 
 /** @brief Increments the tie count.
   * @param amount The amount to increment by. Can be negative.
@@ -151,6 +152,7 @@ int Node::getCount()
 Node::Node()
 {
     turn = PIECE_O; //This is so the first move registered is X if solveForChildren() is called.
+    first = false;
 
     count++;
     if (count % 100000 == 0)
@@ -200,4 +202,11 @@ void Node::setValue(uint8_t x, uint8_t y, uint8_t value)
 void Node::setTurn(uint8_t newTurn)
 {
     turn = newTurn;
+}
+
+int exploreNode(void* data)
+{
+    //Dumb threaded function for exploring a node... using THREADS!
+    (Node*)(data)->solveForChildren();
+    return 0;
 }
