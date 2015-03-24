@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    cout << "Hello, world!" << endl;
+    cout << "Starting calculations..." << endl;
     Node rootNode;
     rootNode.solveForChildren();
     cout << "Number of nodes: " << rootNode.getCount() << endl;
