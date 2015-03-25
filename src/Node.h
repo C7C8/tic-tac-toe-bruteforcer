@@ -1,16 +1,24 @@
 #pragma once
 
+//#define SDL_ENABLED
+
 #include <iostream>
+#ifdef SDL_ENABLED
+    #include "SDL_thread.h"
+#endif // SDL_ENABLED
 using namespace std;
 
-const uint8_t GRID_X = 3;
-const uint8_t GRID_Y = 3;
-const uint8_t DIST_TO_WIN = 3; //The distance that a chain needs to cover in order to count as a win
+const uint8_t GRID_X = 2;
+const uint8_t GRID_Y = 2;
+const uint8_t DIST_TO_WIN = 2; //The distance that a chain needs to cover in order to count as a win
 
 const uint8_t PIECE_X = -1;
 const uint8_t PIECE_O = 1;
 enum endType {NONE, XWIN, OWIN, TIE};
 
+#ifdef SDL_ENABLED
+    extern SDL_SpinLock outputLock;
+#endif // SDL_ENABLED
 
 class Node
 {
@@ -30,6 +38,8 @@ public:
     void incrTieCount(int amount = 1);
     void setValue(uint8_t x, uint8_t y, uint8_t value);
     void setTurn(uint8_t newTurn);
+
+    bool first;
 protected:
     uint8_t investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint8_t piece);
 
@@ -40,5 +50,10 @@ protected:
 
     static long long unsigned int count;
 
+    #ifdef SDL_ENABLED
+        SDL_Thread* threads[GRID_X * GRID_Y]; //One thread per open slot.
+    #endif // SDL_ENABLED
+
     uint8_t board[GRID_X][GRID_Y];
 };
+int exploreNode(void* data);

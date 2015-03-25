@@ -5,10 +5,11 @@ using namespace std;
 
 #define ON_DEBUGGER
 
-int main()
+int main(int argc, char* args[])
 {
     cout << "Starting calculations..." << endl;
     Node rootNode;
+    rootNode.first = true;
     rootNode.solveForChildren();
     cout << "Number of nodes: " << rootNode.getCount() << endl;
     cout << "X Wins:\t" << rootNode.getXCount() << endl;
@@ -19,4 +20,5 @@ int main()
     #ifndef ON_DEBUGGER
         system("pause");
     #endif // ON_DEBUGGER
+    return 0;
 }

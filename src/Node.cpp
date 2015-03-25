@@ -1,5 +1,9 @@
 #include "Node.h"
 
+#ifdef SDL_ENABLED
+    SDL_SpinLock outputLock = 0;
+#endif // SDL_ENABLED
+
 long long unsigned int Node::count = 0;
 long long unsigned int Node::oCount = 0;
 long long unsigned int Node::xCount = 0;
@@ -106,6 +110,10 @@ endType Node::getEndType(uint8_t winDist)
   */
 void Node::solveForChildren()
 {
+    #ifdef SDL_ENABLED
+        int threadcount = 0;
+    #endif // SDL_ENABLED
+
     for (uint8_t iX = 0; iX < GRID_X; ++iX)
     {
         for (uint8_t iY = 0; iY < GRID_Y; ++iY)
@@ -134,9 +142,28 @@ void Node::solveForChildren()
             else if (nodeType == TIE)
                 newNode.incrTieCount();
             else
-                newNode.solveForChildren();
+            {
+                #ifdef SDL_ENABLED
+                if (!first)
+                {
+                    newNode.solveForChildren();
+                    continue;
+                }
+                    threads[threadcount] = SDL_CreateThread(exploreNode, "explorer #" + threadcount, (void*)&newNode);
+                    threadcount++;
+                #else
+                    newNode.solveForChildren();
+                    continue;
+                #endif //SDL_ENABLED
+            }
         }
     }
+    #ifdef SDL_ENABLED
+        //Wait for all threads to complete if there are any...
+        if (first)
+            for (int i = 0; i < GRID_X * GRID_Y; ++i)
+                SDL_WaitThread(threads[i], nullptr);
+    #endif // SDL_ENABLED
 }
 
 /** @brief Returns the total count of all the node objects that have ever been created here.
@@ -151,10 +178,19 @@ int Node::getCount()
 Node::Node()
 {
     turn = PIECE_O; //This is so the first move registered is X if solveForChildren() is called.
+    first = false;
 
     count++;
-    if (count % 100000 == 0)
-        cout << "Count: " << count << endl;
+    if (count % 1000000 == 0)
+    {
+        #ifdef SDL_ENABLED
+            SDL_AtomicLock(&outputLock);
+            cout << "Count: " << count << endl;
+            SDL_AtomicUnlock(&outputLock);
+        #else
+            cout << "Count: " << count << endl;
+        #endif
+    }
 
     //Initialize board
     for (uint8_t x = 0; x < GRID_X; ++x)
@@ -200,4 +236,11 @@ void Node::setValue(uint8_t x, uint8_t y, uint8_t value)
 void Node::setTurn(uint8_t newTurn)
 {
     turn = newTurn;
+}
+
+int exploreNode(void* data)
+{
+    //Dumb threaded function for exploring a node... using THREADS!
+    ((Node*)(data))->solveForChildren();
+    return 0;
 }
