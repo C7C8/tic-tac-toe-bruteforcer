@@ -1,18 +1,24 @@
 #pragma once
 
+//#define SDL_ENABLED
+
 #include <iostream>
-#include "SDL_thread.h"
+#ifdef SDL_ENABLED
+    #include "SDL_thread.h"
+#endif // SDL_ENABLED
 using namespace std;
 
-const uint8_t GRID_X = 4;
-const uint8_t GRID_Y = 4;
-const uint8_t DIST_TO_WIN = 3; //The distance that a chain needs to cover in order to count as a win
+const uint8_t GRID_X = 2;
+const uint8_t GRID_Y = 2;
+const uint8_t DIST_TO_WIN = 2; //The distance that a chain needs to cover in order to count as a win
 
 const uint8_t PIECE_X = -1;
 const uint8_t PIECE_O = 1;
 enum endType {NONE, XWIN, OWIN, TIE};
 
-extern SDL_SpinLock outputLock;
+#ifdef SDL_ENABLED
+    extern SDL_SpinLock outputLock;
+#endif // SDL_ENABLED
 
 class Node
 {
@@ -43,7 +49,10 @@ protected:
     uint8_t turn; //Whose turn it is RIGHT NOW. As in, ON THIS NODE!
 
     static long long unsigned int count;
-    SDL_Thread* threads[GRID_X * GRID_Y]; //One thread per open slot.
+
+    #ifdef SDL_ENABLED
+        SDL_Thread* threads[GRID_X * GRID_Y]; //One thread per open slot.
+    #endif // SDL_ENABLED
 
     uint8_t board[GRID_X][GRID_Y];
 };

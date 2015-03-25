@@ -1,6 +1,8 @@
 #include "Node.h"
 
-SDL_SpinLock outputLock = 0;
+#ifdef SDL_ENABLED
+    SDL_SpinLock outputLock = 0;
+#endif // SDL_ENABLED
 
 long long unsigned int Node::count = 0;
 long long unsigned int Node::oCount = 0;
@@ -108,7 +110,9 @@ endType Node::getEndType(uint8_t winDist)
   */
 void Node::solveForChildren()
 {
-    int threadcount = 0;
+    #ifdef SDL_ENABLED
+        int threadcount = 0;
+    #endif // SDL_ENABLED
 
     for (uint8_t iX = 0; iX < GRID_X; ++iX)
     {
@@ -139,21 +143,27 @@ void Node::solveForChildren()
                 newNode.incrTieCount();
             else
             {
+                #ifdef SDL_ENABLED
                 if (!first)
                 {
                     newNode.solveForChildren();
                     continue;
                 }
-                threads[threadcount] = SDL_CreateThread(exploreNode, "explorer #" + threadcount, (void*)&newNode);
-                threadcount++;
+                    threads[threadcount] = SDL_CreateThread(exploreNode, "explorer #" + threadcount, (void*)&newNode);
+                    threadcount++;
+                #else
+                    newNode.solveForChildren();
+                    continue;
+                #endif //SDL_ENABLED
             }
         }
     }
-
-    //Wait for all threads to complete if there are any...
-    if (first)
-        for (int i = 0; i < GRID_X * GRID_Y; ++i)
-            SDL_WaitThread(threads[i], nullptr);
+    #ifdef SDL_ENABLED
+        //Wait for all threads to complete if there are any...
+        if (first)
+            for (int i = 0; i < GRID_X * GRID_Y; ++i)
+                SDL_WaitThread(threads[i], nullptr);
+    #endif // SDL_ENABLED
 }
 
 /** @brief Returns the total count of all the node objects that have ever been created here.
@@ -173,9 +183,13 @@ Node::Node()
     count++;
     if (count % 1000000 == 0)
     {
-        SDL_AtomicLock(&outputLock);
-        cout << "Count: " << count << endl;
-        SDL_AtomicUnlock(&outputLock);
+        #ifdef SDL_ENABLED
+            SDL_AtomicLock(&outputLock);
+            cout << "Count: " << count << endl;
+            SDL_AtomicUnlock(&outputLock);
+        #else
+            cout << "Count: " << count << endl;
+        #endif
     }
 
     //Initialize board
