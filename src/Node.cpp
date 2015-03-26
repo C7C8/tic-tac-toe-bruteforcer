@@ -1,5 +1,7 @@
 #include "Node.h"
 
+#define SDL_ENABLED
+
 #ifdef SDL_ENABLED
     SDL_SpinLock outputLock = 0;
 #endif // SDL_ENABLED
@@ -144,11 +146,11 @@ void Node::solveForChildren()
             else
             {
                 #ifdef SDL_ENABLED
-                if (!first)
-                {
-                    newNode.solveForChildren();
-                    continue;
-                }
+                    if (!first)
+                    {
+                        newNode.solveForChildren();
+                        continue;
+                    }
                     threads[threadcount] = SDL_CreateThread(exploreNode, "explorer #" + threadcount, (void*)&newNode);
                     threadcount++;
                 #else
