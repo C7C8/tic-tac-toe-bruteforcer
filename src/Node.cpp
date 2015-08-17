@@ -1,6 +1,6 @@
 #include "Node.h"
 
-#define SDL_ENABLED
+//#define SDL_ENABLED
 
 #ifdef SDL_ENABLED
     SDL_SpinLock outputLock = 0;
@@ -59,18 +59,18 @@ int Node::getXCount() const
 /** @brief Gets what type of ending this board contains. Complexity increases with board size and fill level of board.
   * @return Enumerated end type
   */
-endType Node::getEndType(uint8_t winDist)
+endType Node::getEndType(int winDist)
 {
     //Universal win detector. Works by detecting straight lines.
-    for (uint8_t iX = 0; iX < GRID_X; ++iX)
+    for (int iX = 0; iX < GRID_X; ++iX)
     {
-        for (uint8_t iY = 0; iY < GRID_Y; ++iY)
+        for (int iY = 0; iY < GRID_Y; ++iY)
         {
             //Check for empty space
             if (board[iX][iY] == 0)
                 continue;
 
-            uint8_t piece = board[iX][iY]; //What piece is at this spot?
+            int piece = board[iX][iY]; //What piece is at this spot?
             //Begin line identification process. i and j are the directions to move in.
             for (int i = -1; i < 2; ++i)
             {
@@ -79,7 +79,7 @@ endType Node::getEndType(uint8_t winDist)
                     if (i == 0 && j == 0)
                         continue; //Skip spots of not moving at all.
 
-                    uint8_t lineLength = investigateSlot(iX, iY, i, j, piece) + 1; //+1 to account for THIS spot.
+                    int lineLength = investigateSlot(iX, iY, i, j, piece) + 1; //+1 to account for THIS spot.
                     if (lineLength < winDist)
                         continue;
 
@@ -94,9 +94,9 @@ endType Node::getEndType(uint8_t winDist)
 
     //Check for tie condition (last step)
     bool tie = true;
-    for (uint8_t iX = 0; iX < GRID_X; ++iX)
+    for (int iX = 0; iX < GRID_X; ++iX)
     {
-        for (uint8_t iY = 0; iY < GRID_Y; iY++)
+        for (int iY = 0; iY < GRID_Y; iY++)
         {
             if (board[iX][iY] == 0)
                 tie = false;
@@ -116,9 +116,9 @@ void Node::solveForChildren()
         int threadcount = 0;
     #endif // SDL_ENABLED
 
-    for (uint8_t iX = 0; iX < GRID_X; ++iX)
+    for (int iX = 0; iX < GRID_X; ++iX)
     {
-        for (uint8_t iY = 0; iY < GRID_Y; ++iY)
+        for (int iY = 0; iY < GRID_Y; ++iY)
         {
             //Check if this spot is already occupied.
             if (board[iX][iY] != 0)
@@ -126,10 +126,11 @@ void Node::solveForChildren()
 
             Node newNode;
             newNode.turn = turn * -1;
+            newNode.first = false; //Just in case?
 
             //Copy this node's board over to the child node
-            for (uint8_t jX = 0; jX < GRID_X; ++jX)
-                for (uint8_t jY = 0; jY < GRID_Y; ++jY)
+            for (int jX = 0; jX < GRID_X; ++jX)
+                for (int jY = 0; jY < GRID_Y; ++jY)
                     newNode.board[jX][jY] = board[jX][jY];
 
             //Apply the possible move.
@@ -151,8 +152,13 @@ void Node::solveForChildren()
                         newNode.solveForChildren();
                         continue;
                     }
-                    threads[threadcount] = SDL_CreateThread(exploreNode, "explorer #" + threadcount, (void*)&newNode);
-                    threadcount++;
+                    else
+                    {
+                        threads[threadcount] = SDL_CreateThread(exploreNode, "explorer thread", (void*)&newNode);
+                        cout << "Creating thread #" << threadcount << " with ID " << SDL_GetThreadID(threads[threadcount]) << endl;
+                        threadcount++;
+                    }
+
                 #else
                     newNode.solveForChildren();
                     continue;
@@ -164,7 +170,11 @@ void Node::solveForChildren()
         //Wait for all threads to complete if there are any...
         if (first)
             for (int i = 0; i < GRID_X * GRID_Y; ++i)
+            {
+                cout << "Waiting on thread #" << i << " with ID " << SDL_GetThreadID(threads[i]) << endl;
                 SDL_WaitThread(threads[i], nullptr);
+            }
+
     #endif // SDL_ENABLED
 }
 
@@ -195,18 +205,18 @@ Node::Node()
     }
 
     //Initialize board
-    for (uint8_t x = 0; x < GRID_X; ++x)
-        for (uint8_t y = 0; y < GRID_Y; ++y)
+    for (int x = 0; x < GRID_X; ++x)
+        for (int y = 0; y < GRID_Y; ++y)
             board[x][y] = 0;
 }
 
 /** @brief Recursively finds the longest line given a starting spot, a direction, and a piece to look for.
   * @return The maximum line length found.
   */
-uint8_t Node::investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint8_t piece)
+int Node::investigateSlot(int x, int y, int dX, int dY, int piece)
 {
-    uint8_t iX = x + dX;
-    uint8_t iY = y + dY;
+    int iX = x + dX;
+    int iY = y + dY;
 
     //Out-of-bounds checking
     if (iX < 0 || iX >= GRID_X)
@@ -220,22 +230,22 @@ uint8_t Node::investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint
     return investigateSlot(iX, iY, dX, dY, piece) + 1; //Return a plus 1 to indicate that yes, this was another segment in the line.
 }
 
-uint8_t Node::getValue(uint8_t x, uint8_t y)
+int Node::getValue(int x, int y)
 {
     if (x >= 0 && x < GRID_X && y >= 0 && y < GRID_Y)
         return board[x][y];
     return -2; //Not a real value - indicates error condition.
 }
-uint8_t Node::getTurn()
+int Node::getTurn()
 {
     return turn;
 }
-void Node::setValue(uint8_t x, uint8_t y, uint8_t value)
+void Node::setValue(int x, int y, int value)
 {
     if (x >= 0 && x < GRID_X && y >= 0 && y < GRID_Y)
         board[x][y] = value;
 }
-void Node::setTurn(uint8_t newTurn)
+void Node::setTurn(int newTurn)
 {
     turn = newTurn;
 }

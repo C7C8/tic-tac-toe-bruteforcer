@@ -8,12 +8,12 @@
 #endif // SDL_ENABLED
 using namespace std;
 
-const uint8_t GRID_X = 2;
-const uint8_t GRID_Y = 2;
-const uint8_t DIST_TO_WIN = 2; //The distance that a chain needs to cover in order to count as a win
+const int GRID_X = 3;
+const int GRID_Y = 3;
+const int DIST_TO_WIN = 3; //The distance that a chain needs to cover in order to count as a win
 
-const uint8_t PIECE_X = -1;
-const uint8_t PIECE_O = 1;
+const int PIECE_X = -1;
+const int PIECE_O = 1;
 enum endType {NONE, XWIN, OWIN, TIE};
 
 #ifdef SDL_ENABLED
@@ -25,28 +25,28 @@ class Node
 public:
     Node();
     void solveForChildren();
-    endType getEndType(uint8_t winDist = DIST_TO_WIN);
+    endType getEndType(int winDist = DIST_TO_WIN);
     static int getCount();
 
     int getXCount() const;
     int getOCount() const;
     int getTieCount() const;
-    uint8_t getValue(uint8_t x, uint8_t y);
-    uint8_t getTurn();
+    int getValue(int x, int y);
+    int getTurn();
     void incrXCount(int amount = 1);
     void incrOCount(int amount = 1);
     void incrTieCount(int amount = 1);
-    void setValue(uint8_t x, uint8_t y, uint8_t value);
-    void setTurn(uint8_t newTurn);
+    void setValue(int x, int y, int value);
+    void setTurn(int newTurn);
 
     bool first;
 protected:
-    uint8_t investigateSlot(uint8_t x, uint8_t y, uint8_t dX, uint8_t dY, uint8_t piece);
+    int investigateSlot(int x, int y, int dX, int dY, int piece);
 
     static long long unsigned int xCount;
     static long long unsigned int oCount;
     static long long unsigned int tieCount;
-    uint8_t turn; //Whose turn it is RIGHT NOW. As in, ON THIS NODE!
+    int turn; //Whose turn it is RIGHT NOW. As in, ON THIS NODE!
 
     static long long unsigned int count;
 
@@ -54,6 +54,6 @@ protected:
         SDL_Thread* threads[GRID_X * GRID_Y]; //One thread per open slot.
     #endif // SDL_ENABLED
 
-    uint8_t board[GRID_X][GRID_Y];
+    int board[GRID_X][GRID_Y];
 };
 int exploreNode(void* data);
