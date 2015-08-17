@@ -1,6 +1,4 @@
 # tic-tac-toe-bruteforcer
-A dumb no-interface tic-tac-toe solver that can solve tic-tac-toe and derivative games by brute-force.
-
 Remnants of an old research project long since past. It brute-forces a tic-tac-toe game and outputs relevant statistics.
 You can configure its parameters in src/Node.h - they're a couple of `const int`s. It doesn't load a configuration,
 so you'll have to recompile every time you change a paremter.
